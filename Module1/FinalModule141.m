@@ -7,8 +7,6 @@ function vel = control(q, R, speed, path)
 %  path is an Nx2 matrix containing the path as a set of waypoints, columns are x- and y-coordinates respectively.
 % Return:
 %  vel is a 1x2 vector containing the requested velocity and turn rate of the robot [v, omega]
-
-    % clever stuff
     
     % access the pose 
     xValue = q(1);
@@ -31,9 +29,6 @@ function vel = control(q, R, speed, path)
     AngleMeasured=(angdiff(Measuredtheta,angletheta));
     
     AngleMeasured = wrapToPi(AngleMeasured);
-    
-    % Get the angles % Note to self the other redundant code was removed
-    
     AngleMeasured = KH*AngleMeasured;
     
     
@@ -44,14 +39,11 @@ function vel = control(q, R, speed, path)
             AngleMeasured = 1;  
         
     end 
-    
-    
+      
     
     % Getting the vel
     
     vel = [RelativeStraightV AngleMeasured];
-    
-    
     TravelD = ( (q(1) - path(end, 1).^2 + ( q(2) - path(end, 2) ).^2 ) ).^(0.5);
     
     TOStopD = 9/1000;
