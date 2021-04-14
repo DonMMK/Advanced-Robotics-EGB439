@@ -1,5 +1,4 @@
-
-%% To plot the 8 figure path
+%% To plot the 8 figure path << This can be used as a path
 
 % Initialise
 t = linspace(0 , 2 * pi , 100);
@@ -17,8 +16,6 @@ title('Leminscate of Bernoulli')
 xlabel('x(t)')
 ylabel('t')
 plot( X_Function , Y_Function , 'k')
-
-
 
 %% Make sure to name your function correctly; otherwise, the automatic marking script will not assign you the mark. 
 % For example, if your student number is n12345678 and this is a solution for Prac 2, 
