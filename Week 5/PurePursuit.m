@@ -1,4 +1,4 @@
-function vel = control(q, R, speed, path)
+function vel = PurePursuit(q, R, speed, path)
 
 % Inputs:
 %  q is a 1x3 vector giving the current configuration of the robot in units of metres and radians
@@ -44,12 +44,13 @@ function vel = control(q, R, speed, path)
     % Getting the vel
     
     vel = [RelativeStraightV AngleMeasured];
-    TravelD = ( (q(1) - path(end, 1).^2 + ( q(2) - path(end, 2) ).^2 ) ).^(0.5);
+    TravelD = ( (q(1) - path(end, 1)).^2 + ( q(2) - path(end, 2) ).^2 ).^(0.5);
     
     TOStopD = 9/1000;
     
     if TravelD < TOStopD 
         % Reset vals
+        disp('Distance threshold met')
         vel(1) = 0 ; 
         % Reset vals
         vel(2) = 0 ;

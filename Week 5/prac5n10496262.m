@@ -26,17 +26,30 @@ function prac5n10496262(robot)
         xlabel('x(t)')
         ylabel('t')
         plot( X_Function , Y_Function , 'k')
+        
+        % Convert the x and y equations into a path
+        for i = 1:length(t)
+            X_Function(i)
+            Y_Function(i) 
+            
+        end
+        path = [X_Function' ,Y_Function'];
     
 
     % Using the drive to point << starts at P1 hardcoded
-    Nsteps = 100000;
-    goal = [1.8 0];
+    %goal = [1.8 0];
     
+    % Moving according to the leminscate of bernoulli
+    Nsteps = 100000;
     for step = 1: Nsteps
         [x, y ,theta] = robot.getTruePose();
         q = [x y theta];
-        vel = ReachPoint(goal , q);
-        [lWv, rWv] = VtoWheels(vel(1),vel(2)); % << Calling v t wheels
+        R = 0.3;
+        speed = 0.5;
+        vel = PurePursuit(q, R, speed, path); 
+        %vel = ReachPoint(goal , q);
+        
+        [lWv, rWv] = VtoWheels(vel(1),vel(2)); % << Calling v to wheels
         robot.setMotorVel(lWv,rWv)
         
         % if the robot is less than 0.1m of the goal
