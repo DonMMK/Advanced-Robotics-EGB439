@@ -61,7 +61,7 @@ end
 
 
 
-%% Sub function: 
+% Sub function: 
 function IterationsToCount = iterating( counterConstant , trajectory , CounterA ) 
 
      lengthVAR= length(counterConstant);
