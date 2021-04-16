@@ -36,7 +36,7 @@ function prac5n10496262(robot)
 
     end
     path = [X_Function' ,Y_Function'];
-
+    path = []
     
         
     % Robot motion
@@ -45,7 +45,7 @@ function prac5n10496262(robot)
         [x, y ,theta] = robot.getTruePose();
         q = [x y theta];
         R = 0.3;
-        speed = 1;
+        speed = 0.5;
         
 %         % Drive point to get to the P1
 %         ReachFirstPoint = false;
