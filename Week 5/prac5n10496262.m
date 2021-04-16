@@ -44,8 +44,8 @@ function prac5n10496262(robot)
     for step = 1: Nsteps
         [x, y ,theta] = robot.getTruePose();
         q = [x y theta];
-        R = 0.3;
-        speed = 1;
+        R = 0.6;
+        speed = 0.7;
         
 %         % Drive point to get to the P1
 %         ReachFirstPoint = false;
