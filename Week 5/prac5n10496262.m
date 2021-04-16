@@ -1,23 +1,4 @@
-%% To plot the 8 figure path << This can be used as a path
-
-% Initialise
-t = linspace(0 , 2 * pi , 100);
-%A = 0.5 / sqrt(2); % Value chosen such that x is limited to -0.5m and 0.5m
-
-% Equations given
-X_Function = (1.8 .* cos(t) ) ./ ( 1 + (sin(t).^2) );
-Y_Function = (3 .* sin(t) .* cos(t)) ./ (1 + (sin(t).^2) );
-
-% Plotting the graph
-figure(1);
-hold on
-grid on
-title('Leminscate of Bernoulli')
-xlabel('x(t)')
-ylabel('t')
-plot( X_Function , Y_Function , 'k')
-
-%% Make sure to name your function correctly; otherwise, the automatic marking script will not assign you the mark. 
+% Make sure to name your function correctly; otherwise, the automatic marking script will not assign you the mark. 
 % For example, if your student number is n12345678 and this is a solution for Prac 2, 
 % then you should name this function prac2n12345678
 
@@ -26,6 +7,25 @@ function prac5n10496262(robot)
 	% The function needs to start with the following call; 
 	%otherwise, your code will not run during automarking.
 	robot.powerON();
+    
+    
+
+        % Initialise
+        t = linspace(0 , 2 * pi , 100);
+        %A = 0.5 / sqrt(2); % Value chosen such that x is limited to -0.5m and 0.5m
+
+        % Equations given
+        X_Function = (1.8 .* cos(t) ) ./ ( 1 + (sin(t).^2) );
+        Y_Function = (3 .* sin(t) .* cos(t)) ./ (1 + (sin(t).^2) );
+
+        % Plotting the graph
+        figure(1);
+        hold on
+        grid on
+        title('Leminscate of Bernoulli')
+        xlabel('x(t)')
+        ylabel('t')
+        plot( X_Function , Y_Function , 'k')
     
 
     % Using the drive to point << starts at P1 hardcoded
