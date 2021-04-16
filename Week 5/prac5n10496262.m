@@ -10,74 +10,81 @@ function prac5n10496262(robot)
     
     
 
-    
-    
-    % Initialise
-    t = linspace(0 , 2 * pi , 100);
-    %A = 0.5 / sqrt(2); % Value chosen such that x is limited to -0.5m and 0.5m
-
-    % Equations given
-    X_Function = (1.8 .* cos(t) ) ./ ( 1 + (sin(t).^2) );
-    Y_Function = (3 .* sin(t) .* cos(t)) ./ (1 + (sin(t).^2) );
-
-    % Plotting the graph
-    figure(1);
-    hold on
-    grid on
-    title('Leminscate of Bernoulli')
-    xlabel('x(t)')
-    ylabel('t')
-    plot( X_Function , Y_Function , 'k')
-
-    % Convert the x and y equations into a path
-    for i = 1:length(t)
-        X_Function(i)
-        Y_Function(i) 
-
+    tic
+    while (toc < 20)
+        
+        % Initialise
+        t = linspace(0 , 2 * pi , 100);
+        %A = 0.5 / sqrt(2); % Value chosen such that x is limited to -0.5m and 0.5m
+        
+        % Equations given
+        X_Function = (1.8 .* cos(t) ) ./ ( 1 + (sin(t).^2) );
+        Y_Function = (3 .* sin(t) .* cos(t)) ./ (1 + (sin(t).^2) );
+        
+        % Plotting the graph
+        figure(1);
+        hold on
+        grid on
+        title('Leminscate of Bernoulli')
+        xlabel('x(t)')
+        ylabel('t')
+        plot( X_Function , Y_Function , 'k')
+        
+        % Convert the x and y equations into a path
+        for i = 1:length(t)
+            X_Function(i)
+            Y_Function(i)
+            
+        end
+        path = [X_Function' ,Y_Function'];
+        
+        
+        
+        % Robot motion
+        Nsteps = 100000;
+        for step = 1: Nsteps
+            [x, y ,theta] = robot.getTruePose();
+            q = [x y theta];
+            R = 0.6;
+            speed = 0.7;
+            
+            %         % Drive point to get to the P1
+            %         ReachFirstPoint = false;
+            %         while ReachFirstPoint == false
+            %
+            %             goal = [1.8 0];
+            %             vel = ReachPoint(goal , q);
+            %             [lWv, rWv] = VtoWheels(vel(1),vel(2)); % << Calling v to wheels
+            %             robot.setMotorVel(lWv,rWv)
+            %
+            %             % checking if the robot reaches the first point
+            %             [x, y ,theta] = robot.getTruePose();
+            %             q = [x y theta];
+            %             if [q(1) q(2)] == goal
+            %                 ReachFirstPoint = true;
+            %             end
+            %         end
+            
+            
+            % Pure pursuit according to the leminscate of bernoulli
+            vel = PurePursuit(q, R, speed, path);
+            [lWv, rWv] = VtoWheels(vel(1),vel(2)); % << Calling v to wheels
+            robot.setMotorVel(lWv,rWv)
+            
+            % if the robot is less than 0.1m of the goal
+            %if sqrt (( goal(2) - q(2) )^2 + (goal(1) - q(1))^2 ) < 0.1
+            %    pause(1);
+            %    robot.setMotorVel(0,0)
+            %    break;
+            %end
+            
+        end
+        
     end
-    path = [X_Function' ,Y_Function'];
-
+    % Stop after 20
+    robot.setMotorVel(0,0)
     
-        
-    % Robot motion
-    Nsteps = 100000;
-    for step = 1: Nsteps
-        [x, y ,theta] = robot.getTruePose();
-        q = [x y theta];
-        R = 0.6;
-        speed = 0.7;
-        
-%         % Drive point to get to the P1
-%         ReachFirstPoint = false;
-%         while ReachFirstPoint == false
-% 
-%             goal = [1.8 0];
-%             vel = ReachPoint(goal , q);
-%             [lWv, rWv] = VtoWheels(vel(1),vel(2)); % << Calling v to wheels
-%             robot.setMotorVel(lWv,rWv)
-%             
-%             % checking if the robot reaches the first point
-%             [x, y ,theta] = robot.getTruePose();
-%             q = [x y theta];
-%             if [q(1) q(2)] == goal
-%                 ReachFirstPoint = true;
-%             end
-%         end
-        
-        
-        % Pure pursuit according to the leminscate of bernoulli
-        vel = PurePursuit(q, R, speed, path); 
-        [lWv, rWv] = VtoWheels(vel(1),vel(2)); % << Calling v to wheels
-        robot.setMotorVel(lWv,rWv)
-        
-        % if the robot is less than 0.1m of the goal
-        %if sqrt (( goal(2) - q(2) )^2 + (goal(1) - q(1))^2 ) < 0.1
-        %    pause(1);
-        %    robot.setMotorVel(0,0)
-        %    break;
-        %end
-        
-    end
+    
     
 	%The function needs to end with the following calls; 
 	%otherwise, your code will not run during automarking.

@@ -24,7 +24,7 @@ function vel = PurePursuit(q, R, speed, path)
     
     RelativeStraightV = speed;
 
-    KH = 5;
+    KH = 6;
     angletheta = atan2( Positions(2) - q(2) , Positions(1) - q(1) );
     AngleMeasured=(angdiff(Measuredtheta,angletheta));
     
