@@ -1,4 +1,4 @@
-function out = myFunction(op, varargin)
+function out = Question3(op, varargin)
     switch op
         case 'dxform'
             out = distanceTransform(varargin{:});
@@ -8,6 +8,10 @@ function out = myFunction(op, varargin)
 end
 
 %----- YOUR CODE GOES BELOW HERE -----
+% You are using the manhattan distance measure in Q2.3 when implementing your distance transform. 
+% This also means that the grid is only 4-connected for the pathplanning method in the second part of the question.
+% Make your own maps to test on, don't just test on the map we provide in grader.
+
 
 function dtransform = distanceTransform(map, goal)
     % Input:
