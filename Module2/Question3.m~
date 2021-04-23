@@ -1,4 +1,4 @@
-function out = Question3(op, varargin)
+function out = myFunction(op, varargin)
     switch op
         case 'dxform'
             out = distanceTransform(varargin{:});
@@ -22,60 +22,51 @@ function dtransform = distanceTransform(map, goal)
     
     % compute the distance transform of map
     
-    [length_Y , length_X] = size(map);
-    dtransform( map == 1 ) = Nan;
+    [vARlENGTHy , vARlENGTHx] = size(map);
+    length_Y = vARlENGTHy;
+    length_X = vARlENGTHx;
     
-    dtransform( goalCell(2) , goalCell(1) ) = 0;
+    dtransform = inf(length_Y, length_X);
+    dtransform(map == 1)= NaN; % 
+    
+    % Get the goal as zero
+    dtransform( goal(2) , goal(1) ) = 0;
+    
+    CheckInfinity = inf;
     
     % Use the path planning cost function
-    Cost_Func = [ 2^0.5, 1, 2^0.5; 1 , 0, 1; 2^0.5, 1, 2^0.5];
+    Cost_Func = [ inf, 1, inf;
+        1 , 0, 1;
+        inf, 1, inf];
     
     % An infinte loop
     CheckInfinity = inf;
     while true
-        CurrentBlock = sum (dtransform == inf);
+        % Inspect loop
+        CurrentBlock = sum(dtransform == inf);
         if ( CurrentBlock >= CheckInfinity)
-            break
+            break;
         end
-        CheckInfinity = CurrentBlock;
+        PassBlock = CurrentBlock;
+        CheckInfinity = PassBlock;
         
-        CountX = 1; CountY = 1;
-        while CountX < length_X
-            while CountY < length_Y
+        PassThroughLength_X = length_X;
+        PassThroughLength_Y = length_Y;
+        for x = 1: PassThroughLength_X
+            for y = 1 : PassThroughLength_Y
                 
-                if isnan( dtransform(CountY ,CountX ) )
+                if isnan(dtransform(y ,x ) )
                     continue;
                 end
                 
+                % Calling the window function from module 2.2
+                M = window(dtransform, x, y) ;
                 
-                %% Calling the window function from module 2.2
-                
-                SizeofA = size(A);
-                Length_Y = SizeofA(1); Length_X = SizeofA(2);
-                
-                Y_Across = y+1; Y_Down = y-1;
-                X_Across = x+1; X_Down = x-1;
-                
-                MinVal = 2;
-                
-                Subs = 1;
-                ymax = Length_Y- Subs; xmax = Length_X- Subs;
-                
-                
-                isOutOfBounds = x < MinVal || y < MinVal || x > xmax || y > ymax;
-                if (isOutOfBounds)
-                    M = [];
-                else
-                    M = A(Y_Down:Y_Across,X_Down:X_Across);
-                end
-    
-    
-                M = window(A, x, y) ;
-                %
                 % 
-                NewMin = Cost_Func + M ;
-                dtransform(y, x) = min(min(NewMin));
-                
+                CostFuncPassing = Cost_Func;
+                NewMin = CostFuncPassing + M ;
+                GettheValue(y,x) = min(min(NewMin));
+                dtransform(y, x) = GettheValue(y,x);
                 
             end
             
@@ -103,31 +94,93 @@ function path = findPath(map, start, goal)
     while true
         
         % Get the 3x3 window around the current coordinates
-        y = path(end, 2);x = path(end, 1);
+        GetPathY = path(end, 2); GetPathx = path(end, 1);
+        y = GetPathY;
+        x = GetPathx;
         
-        %% Calling the window function
         M = window(dtransform, x, y);
         
-        
-        %% New Coordinates by using the minval function in
-        
-        [PosA , PosB] = find (M == min( min(M)) );
-        % Hard coding the center value
-        RelPath = [2 - PosB,2 - PosA];
-        next = [RelPath(1) RelPath(2) ];
-        
-        %next = minval(M);
-        
-        %%
+        % New Coordinates by using the minval function
+        next = minval(M);
         New_YCoord = y + next(2); New_XCoord = x + next(1);
+        
+        NEW_VAR_Y = New_YCoord;
+        NEW_VAR_X = New_XCoord;
          % compute the best path 
-        path = [path; New_XCoord New_YCoord];
+        path = [path; NEW_VAR_X, NEW_VAR_Y];
         
         % Check if goal has been reached
-        if (dtransform(New_YCoord, New_XCoord) == 0)
+
+        if (dtransform(NEW_VAR_Y, NEW_VAR_X) == 0)
             break;
         end
         
     end
+    
+end
+
+
+
+
+function M = window(dtransform, x, y) 
+% Input:
+%  A an arbitrary sized real matrix, at least 3x3.
+%  x the x-coordinate (horizontal index) of the centre of the window.
+%  y the y-coordinate (vertical index) of the centre of the window.
+% Return:
+%  M as 3x3 matrix which are the elements of M centered on the element (x,y).
+%
+% Should the window extend beyond the edges of the matrix the function must
+% return an empty matrix [].
+    
+    VarA = padarray(dtransform , [1 1], NaN);
+    % Using the padarray function inbuilt
+    
+    % Changes
+    subsC = 2;
+    Y2 = y + subsC;
+    X2 = x + subsC;
+    
+    PassthroughY = Y2;
+    PassthroughX = X2;
+    
+    % Return the window
+    M = VarA( y:PassthroughY , x: PassthroughX);
+    
+    
+    
+end
+
+
+function next = minval(M)
+% Input:
+%  M is a real 3x3 matrix
+% Return:
+%  next is a 1x2 matrix with elements [x, y] which are the horizontal and vertical coordinates relative to the centre
+%       element, of the smallest element in the matrix.
+    
+    % Get the minimum rows using the min function
+    [VarN, VarA] = min(M);
+    VarPassN = VarN;
+    VarPassA = VarA;
+    
+    % Min function to get the column
+    [~ , VarB] = min(VarPassN);
+    VarPassB = VarB;
+
+    
+    % Get the required values for the x and y
+    shifting = 2;
+    y = VarPassB - shifting;
+    x = VarPassA(VarPassB) - shifting;
+    
+    
+    % Return the elements x and y in the next matrix
+    next = [y x];
+    
+
+
+      
+
     
 end
