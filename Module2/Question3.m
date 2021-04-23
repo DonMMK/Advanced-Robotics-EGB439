@@ -41,9 +41,9 @@ function dtransform = distanceTransform(map, goal)
         end
         CheckInfinity = CurrentBlock;
         
-        CountX = 1; CountY = 1;
-        while CountX < length_X
-            while CountY < length_Y
+        
+        for CountX = 1: length_X
+            for CountY = 1 : length_Y
                 
                 if isnan( dtransform(CountY ,CountX ) )
                     continue;
@@ -55,8 +55,7 @@ function dtransform = distanceTransform(map, goal)
                 % 
                 NewMin = Cost_Func + M ;
                 dtransform(CountY, CountX) = min(min(NewMin));
-                CountX = CountX + 1;
-                CountY = CountY + 1;
+
                 
             end
             
@@ -84,12 +83,12 @@ function path = findPath(map, start, goal)
     while true
         
         % Get the 3x3 window around the current coordinates
-        y = path(end, 2);x = path(end, 1);
+        CountY = path(end, 2);CountX = path(end, 1);
         M = window(dtransform, CountX, CountY);
         
         % New Coordinates by using the minval function
         next = minval(M);
-        New_YCoord = y + next(2); New_XCoord = x + next(1);
+        New_YCoord = CountY + next(2); New_XCoord = CountX + next(1);
          % compute the best path 
         path = [path; New_XCoord New_YCoord];
         
