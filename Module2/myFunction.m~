@@ -23,15 +23,35 @@ function M = window(A, x, y)
 % Should the window extend beyond the edges of the matrix the function must
 % return an empty matrix [].
     
-    % Using the padarray function;
-    VarA = padarray(A , [1 1], NaN);
+%     % Using the padarray function;
+%     VarA = padarray(A , [1 1], NaN);
+%     
+%     % Get Parameters
+%     Y2 = y + 2;
+%     X2 = x + 2;
+%     
+%     % Return the window
+%     M = VarA( y:Y2 , x: X2);
+
+    SizeofA = size(A);
+    Length_Y = SizeofA(1); Length_X = SizeofA(2);
     
-    % Get Parameters
-    Y2 = y + 2;
-    X2 = x + 2;
+    xs = x-1; 
+    xe = x+1;
+    ys = y-1;
+    ye = y+1;
     
-    % Return the window
-    M = VarA( y:Y2 , x: X2);
+    xmin = 2;
+    ymin = 2;
+    xmax = xlen-1;
+    ymax = ylen-1;
+    
+    isOutOfBounds = x < xmin || y < ymin || x > xmax || y > ymax;
+    if (isOutOfBounds)
+        M = [];
+    else
+        M = A(ys:ye,xs:xe);
+    end
 end
 
 function B = minwin(A) 
@@ -40,11 +60,29 @@ function B = minwin(A)
 % of a 3x3 window of A centered at the corresponding element.  Elements of B 
 % that correspond to a window which "falls off the edge" of the matrix A should be set to a value of NaN.
     
-    CornersNew(1,:) = zeros(size(A))
+    % Makiing an empty matrix
+    CornersNew(1,:) = zeros(size(A));
+    
     CornersNew(: , end) = NaN;
+    CornersNew(: , 1) = NaN;
+    CornersNew(end , :) = NaN;
+    CornersNew(1 , :) = NaN;
     
+    % Getting the size of the window
+    WindowSize =  size(A);
     
-    B = ;
+    Length_Y = WindowSize(2); Length_X = WindowSize(1);
+    
+    BoundaryY = 2:Length_Y ;BoundaryX = 2:Length_X;
+    
+    % Using a loop to check
+    for Count_I = BoundaryX
+        for Count_J = BoundaryY
+            CornersNew(Count_J , Count_I) = min(min(window( A, Count_I, Count_J )));
+        end
+    end
+    
+    B = CornersNew;
 end
 
 function next = minval(M)
@@ -55,14 +93,18 @@ function next = minval(M)
 %       element, of the smallest element in the matrix.
     
     % Get the minimum rows using the min function
-    [VarN ,VarA] = min(M);
+    [VarN] = min(M);
+    
     
     % Min function to get the column
     [~ , VarB] = min(VarN);
+    [~,VarA] = min(M);
+
     
     % Get the required values for the x and y
-    y = VarB - 2;
-    x = VarA(Varb) - 2;
+    shifting = 2;
+    y = VarB - shifting;
+    x = VarA(VarB) - shifting;
     
     
     % Return the elements x and y in the next matrix

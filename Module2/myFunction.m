@@ -23,15 +23,34 @@ function M = window(A, x, y)
 % Should the window extend beyond the edges of the matrix the function must
 % return an empty matrix [].
     
-    % Using the padarray function;
-    VarA = padarray(A , [1 1], NaN);
+%     % Using the padarray function;
+%     VarA = padarray(A , [1 1], NaN);
+%     
+%     % Get Parameters
+%     Y2 = y + 2;
+%     X2 = x + 2;
+%     
+%     % Return the window
+%     M = VarA( y:Y2 , x: X2);
+
+    SizeofA = size(A);
+    Length_Y = SizeofA(1); Length_X = SizeofA(2);
     
-    % Get Parameters
-    Y2 = y + 2;
-    X2 = x + 2;
+    Y_Across = y+1; Y_Down = y-1;
+    X_Across = x+1; X_Down = x-1; 
     
-    % Return the window
-    M = VarA( y:Y2 , x: X2);
+    MinVal = 2;
+    
+    Subs = 1;
+    ymax = Length_Y- Subs; xmax = Length_X- Subs;
+    
+    
+    isOutOfBounds = x < MinVal || y < MinVal || x > xmax || y > ymax;
+    if (isOutOfBounds)
+        M = [];
+    else
+        M = A(Y_Down:Y_Across,X_Down:X_Across);
+    end
 end
 
 function B = minwin(A) 
