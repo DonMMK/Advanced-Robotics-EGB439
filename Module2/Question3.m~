@@ -47,9 +47,31 @@ function dtransform = distanceTransform(map, goal)
                     continue;
                 end
                 
-                % Calling the window function from module 2.2
-                M = window(A, x, y) ;
                 
+                %% Calling the window function from module 2.2
+                
+                SizeofA = size(A);
+                Length_Y = SizeofA(1); Length_X = SizeofA(2);
+                
+                Y_Across = y+1; Y_Down = y-1;
+                X_Across = x+1; X_Down = x-1;
+                
+                MinVal = 2;
+                
+                Subs = 1;
+                ymax = Length_Y- Subs; xmax = Length_X- Subs;
+                
+                
+                isOutOfBounds = x < MinVal || y < MinVal || x > xmax || y > ymax;
+                if (isOutOfBounds)
+                    M = [];
+                else
+                    M = A(Y_Down:Y_Across,X_Down:X_Across);
+                end
+    
+    
+                M = window(A, x, y) ;
+                %
                 % 
                 NewMin = Cost_Func + M ;
                 dtransform(y, x) = min(min(NewMin));
@@ -82,21 +104,30 @@ function path = findPath(map, start, goal)
         
         % Get the 3x3 window around the current coordinates
         y = path(end, 2);x = path(end, 1);
+        
+        %% Calling the window function
         M = window(dtransform, x, y);
         
-        % Find the new coordinates
-        next = minval(M);
-        ynew = y + next(2); xnew = x + next(1);
         
-        path = [path; xnew ynew];
+        %% New Coordinates by using the minval function in
+        
+        [PosA , PosB] = find (M == min( min(M)) );
+        % Hard coding the center value
+        RelPath = [2 - PosB,2 - PosA];
+        next = [RelPath(1) RelPath(2) ];
+        
+        %next = minval(M);
+        
+        %%
+        New_YCoord = y + next(2); New_XCoord = x + next(1);
+         % compute the best path 
+        path = [path; New_XCoord New_YCoord];
         
         % Check if goal has been reached
-        if (dtransform(ynew, xnew) == 0)
+        if (dtransform(New_YCoord, New_XCoord) == 0)
             break;
         end
         
     end
     
-    % compute the best path 
-    path = 
 end

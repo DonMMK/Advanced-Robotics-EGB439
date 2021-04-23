@@ -91,21 +91,36 @@ function next = minval(M)
 %  next is a 1x2 matrix with elements [x, y] which are the horizontal and vertical coordinates relative to the centre
 %       element, of the smallest element in the matrix.
     
-    % Get the minimum rows using the min function
-    [VarN] = min(M);
+%     % Get the minimum rows using the min function
+%     [VarN] = min(M);
+%     
+%     
+%     % Min function to get the column
+%     [~ , VarB] = min(VarN);
+%     [~,VarA] = min(M);
+% 
+%     
+%     % Get the required values for the x and y
+%     shifting = 2;
+%     y = VarB - shifting;
+%     x = VarA(VarB) - shifting;
+%     
+%     
+%     % Return the elements x and y in the next matrix
+%     next = [x y];
+    
+    % Gives the minumum element among rows/ columns
+    [PosA , PosB] = find (M == min( min(M)) );
     
     
-    % Min function to get the column
-    [~ , VarB] = min(VarN);
-    [~,VarA] = min(M);
+    % Hard coding the center value
+      RelPath = [2 - PosB,2 - PosA];
+    
+      next = [RelPath(1) RelPath(2) ];
+    
+    
+    
+    
 
     
-    % Get the required values for the x and y
-    shifting = 2;
-    y = VarB - shifting;
-    x = VarA(VarB) - shifting;
-    
-    
-    % Return the elements x and y in the next matrix
-    next = [x y];
 end
