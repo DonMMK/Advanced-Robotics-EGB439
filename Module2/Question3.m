@@ -1,4 +1,4 @@
-function out = Question3(op, varargin)
+function out = myFunction(op, varargin)
     switch op
         case 'dxform'
             out = distanceTransform(varargin{:});
@@ -42,19 +42,19 @@ function dtransform = distanceTransform(map, goal)
         CheckInfinity = CurrentBlock;
         
         
-        for CountX = 1: length_X
-            for CountY = 1 : length_Y
+        for x = 1: length_X
+            for y = 1 : length_Y
                 
-                if isnan( dtransform(CountY ,CountX ) )
+                if isnan( dtransform(y ,x ) )
                     continue;
                 end
                 
                 % Calling the window function from module 2.2
-                M = window(dtransform, CountX, CountY) ;
+                M = window(dtransform, x, y) ;
                 
                 % 
                 NewMin = Cost_Func + M ;
-                dtransform(CountY, CountX) = min(min(NewMin));
+                dtransform(y, x) = min(min(NewMin));
 
                 
             end
@@ -83,12 +83,12 @@ function path = findPath(map, start, goal)
     while true
         
         % Get the 3x3 window around the current coordinates
-        CountY = path(end, 2);CountX = path(end, 1);
-        M = window(dtransform, CountX, CountY);
+        y = path(end, 2);x = path(end, 1);
+        M = window(dtransform, x, y);
         
         % New Coordinates by using the minval function
         next = minval(M);
-        New_YCoord = CountY + next(2); New_XCoord = CountX + next(1);
+        New_YCoord = y + next(2); New_XCoord = x + next(1);
          % compute the best path 
         path = [path; New_XCoord New_YCoord];
         
@@ -104,7 +104,7 @@ end
 
 
 
-function M = window(dtransform, CountX, CountY) 
+function M = window(dtransform, x, y) 
 % Input:
 %  A an arbitrary sized real matrix, at least 3x3.
 %  x the x-coordinate (horizontal index) of the centre of the window.
@@ -119,11 +119,11 @@ function M = window(dtransform, CountX, CountY)
     VarA = padarray(dtransform , [1 1], NaN);
     
     % Get Parameters
-    Y2 = CountY + 2;
-    X2 = CountX + 2;
+    Y2 = y + 2;
+    X2 = x + 2;
     
     % Return the window
-    M = VarA( CountY:Y2 , CountX: X2);
+    M = VarA( y:Y2 , x: X2);
 
 %     SizeofA = size(dtransform);
 %     Length_Y = SizeofA(1); Length_X = SizeofA(2);
