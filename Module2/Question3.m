@@ -28,7 +28,9 @@ function dtransform = distanceTransform(map, goal)
     dtransform( goal(2) , goal(1) ) = 0;
     
     % Use the path planning cost function
-    Cost_Func = [ 2^0.5, 1, 2^0.5; 1 , 0, 1; 2^0.5, 1, 2^0.5];
+    Cost_Func = [ inf, 1, inf;
+        1 , 0, 1;
+        inf, 1, inf];
     
     % An infinte loop
     CheckInfinity = inf;
@@ -48,12 +50,13 @@ function dtransform = distanceTransform(map, goal)
                 end
                 
                 % Calling the window function from module 2.2
-                M = window(A, x, y) ;
+                M = window(dtransform, CountX, CountY) ;
                 
                 % 
                 NewMin = Cost_Func + M ;
-                dtransform(y, x) = min(min(NewMin));
-                
+                dtransform(CountY, CountX) = min(min(NewMin));
+                CountX = CountX + 1;
+                CountY = CountY + 1;
                 
             end
             
@@ -82,7 +85,7 @@ function path = findPath(map, start, goal)
         
         % Get the 3x3 window around the current coordinates
         y = path(end, 2);x = path(end, 1);
-        M = window(dtransform, x, y);
+        M = window(dtransform, CountX, CountY);
         
         % New Coordinates by using the minval function
         next = minval(M);
@@ -102,7 +105,7 @@ end
 
 
 
-function M = window(A, x, y) 
+function M = window(dtransform, CountX, CountY) 
 % Input:
 %  A an arbitrary sized real matrix, at least 3x3.
 %  x the x-coordinate (horizontal index) of the centre of the window.
@@ -113,34 +116,37 @@ function M = window(A, x, y)
 % Should the window extend beyond the edges of the matrix the function must
 % return an empty matrix [].
     
-%     % Using the padarray function;
-%     VarA = padarray(A , [1 1], NaN);
-%     
-%     % Get Parameters
-%     Y2 = y + 2;
-%     X2 = x + 2;
-%     
-%     % Return the window
-%     M = VarA( y:Y2 , x: X2);
+    % Using the padarray function;
+    VarA = padarray(dtransform , [1 1], NaN);
+    
+    % Get Parameters
+    Y2 = CountY + 2;
+    X2 = CountX + 2;
+    
+    % Return the window
+    M = VarA( CountY:Y2 , CountX: X2);
 
-    SizeofA = size(A);
-    Length_Y = SizeofA(1); Length_X = SizeofA(2);
+%     SizeofA = size(dtransform);
+%     Length_Y = SizeofA(1); Length_X = SizeofA(2);
+%     
+%     Y_Across = CountY+1; Y_Down = CountY-1;
+%     X_Across = CountX+1; X_Down = CountX-1; 
+%     
+%     MinVal = 2;
+%     
+%     Subs = 1;
+%     ymax = Length_Y- Subs; xmax = Length_X - Subs;
+%     
+%     
+%     isOutOfBounds = CountX < MinVal || CountY < MinVal || CountX > xmax || CountY > ymax;
+%     if (isOutOfBounds)
+%         M = [];
+%     else
+%         M = dtransform(Y_Down:Y_Across,X_Down:X_Across);
+%     end
     
-    Y_Across = y+1; Y_Down = y-1;
-    X_Across = x+1; X_Down = x-1; 
-    
-    MinVal = 2;
-    
-    Subs = 1;
-    ymax = Length_Y- Subs; xmax = Length_X- Subs;
     
     
-    isOutOfBounds = x < MinVal || y < MinVal || x > xmax || y > ymax;
-    if (isOutOfBounds)
-        M = [];
-    else
-        M = A(Y_Down:Y_Across,X_Down:X_Across);
-    end
 end
 
 
