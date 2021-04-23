@@ -84,17 +84,19 @@ function path = findPath(map, start, goal)
         y = path(end, 2);x = path(end, 1);
         M = window(dtransform, x, y);
         
-        % New Coordinates by using the minval function
+        % Find the new coordinates
         next = minval(M);
-        New_YCoord = y + next(2); New_XCoord = x + next(1);
-         % compute the best path 
-        path = [path; New_XCoord New_YCoord];
+        ynew = y + next(2); xnew = x + next(1);
+        
+        path = [path; xnew ynew];
         
         % Check if goal has been reached
-        if (dtransform(New_YCoord, New_XCoord) == 0)
+        if (dtransform(ynew, xnew) == 0)
             break;
         end
         
     end
     
+    % compute the best path 
+    path = 
 end

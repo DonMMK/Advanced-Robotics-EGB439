@@ -40,29 +40,11 @@ function B = minwin(A)
 % of a 3x3 window of A centered at the corresponding element.  Elements of B 
 % that correspond to a window which "falls off the edge" of the matrix A should be set to a value of NaN.
     
-    % Makiing an empty matrix
-    CornersNew(1,:) = zeros(size(A));
-    
+    CornersNew(1,:) = zeros(size(A))
     CornersNew(: , end) = NaN;
-    CornersNew(: , 1) = NaN;
-    CornersNew(end , :) = NaN;
-    CornersNew(1 , :) = NaN;
     
-    % Getting the size of the window
-    WindowSize =  size(A);
     
-    Length_Y = WindowSize(2); Length_X = WindowSize(1);
-    
-    BoundaryY = 2:Length_Y ;BoundaryX = 2:Length_X;
-    
-    % Using a loop to check
-    for Count_I = BoundaryX
-        for Count_J = BoundaryY
-            CornersNew(Count_J , Count_I) = min(min(window( A, Count_I, Count_J )));
-        end
-    end
-    
-    B = CornersNew;
+    B = ;
 end
 
 function next = minval(M)
@@ -73,18 +55,14 @@ function next = minval(M)
 %       element, of the smallest element in the matrix.
     
     % Get the minimum rows using the min function
-    [VarN] = min(M);
-    
+    [VarN ,VarA] = min(M);
     
     % Min function to get the column
     [~ , VarB] = min(VarN);
-    [~,VarA] = min(M);
-
     
     % Get the required values for the x and y
-    shifting = 2;
-    y = VarB - shifting;
-    x = VarA(VarB) - shifting;
+    y = VarB - 2;
+    x = VarA(Varb) - 2;
     
     
     % Return the elements x and y in the next matrix
