@@ -11,7 +11,7 @@
 % 2. Edit the port number to match the port that the remote API is running
 %    on. 
 
-PORT=19999;
+PORT=19997;
 robot = MyRobot(PORT);
 fprintf("Connected! ID: %d\n", robot.getClientID());
 

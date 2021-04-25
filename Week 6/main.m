@@ -11,7 +11,7 @@
 % 2. Edit the port number to match the port that the remote API is running
 %    on. 
 
-PORT=19999;
+PORT=19997;
 robot = MyRobot(PORT);
 fprintf("Connected! ID: %d\n", robot.getClientID());
 
@@ -21,7 +21,7 @@ fprintf("Connected! ID: %d\n", robot.getClientID());
 % 4. Edit the name of the function to match the name of your solution
 %   function. Eg 
 %   prac2n12345678(robot) if your student number is n12345678
-prac6n1234567(robot);
+prac6n10496262(robot);
 
 % After you are happy with your solution, 
 % submit the file prac2[yourstdnumber].m to BlackBoard

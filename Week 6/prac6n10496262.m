@@ -7,7 +7,72 @@ function prac6n1234567(robot)
 	%otherwise, your code will not run during automarking.
 	robot.powerON();
     
+    % Get the pose of the robot
+    [x, y ,theta] = robot.getTruePose();
+    pose = [x y theta];
     
+    % Use the camera and get the image
+     img = robot.getArenaImage();
+%     % Define start and goal
+%     scalePx = 100 / 2;
+%     start = [q(1) q(2)] * scalePx;
+%     goal = [-2 2] * scalePx;
+%     
+    
+    
+    
+    %% J Prac04
+    
+    % Values
+    threshBot = 255 * 0.14;
+    threshTop = 255 * 0.45;
+    scalePx = 100 / 2;
+    
+    % Get image and pose
+%     img = pb.getLocalizerImage;
+%     pose = pb.getLocalizerPose.pose;
+    
+    % Get 100x100 map from localizer image
+    img = imresize(img, [100 100]);
+    img = ordfilt2(img, 25, true(5));
+    map = img >= threshBot & img <= threshTop;
+    
+    % Remove obstacles from a rectangle around the robot
+    if ~(pose(1) == 0 && pose(2) == 0 && pose(3) == 0)
+        x1 = max(round( pose(1) * scalePx - 8), 0);
+        x2 = min(round( pose(1) * scalePx + 8), 100);
+        y1 = max(round((-pose(2)+2) * scalePx - 8), 0);
+        y2 = min(round((-pose(2)+2) * scalePx + 8), 100);
+        map(y1:y2,x1:x2) = 0;
+    end
+    
+    % Convert to RGB
+    mapRGB = zeros(100, 100, 3);
+    mapRGB(:,:,1) = map;
+    mapRGB(:,:,2) = ~map;
+    
+    % Plot map
+    figure
+    idisp(mapRGB, 'xydata', {[0 2], [2 0]}, 'ynormal')
+    hold on
+    
+    % Plot triangle
+    q = [x y theta];
+    
+    %% J QPLOT
+    tri = [0 0 1; -0.15 -0.05 1; -0.15 0.05 1; 0 0 1]';
+    x = q(1);
+    y = q(2);
+    ang = q(3);
+    H = [cos(ang) -sin(ang) x; sin(ang) cos(ang) y; 0 0 1];
+    Q = H*tri;
+    h = plot(Q(1,:), Q(2,:), 'k-');
+
+    
+    
+    
+    
+    %%
 
 
 	%The function needs to end with the following calls; 
