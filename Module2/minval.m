@@ -5,11 +5,11 @@ function next = minval(M)
 %  next is a 1x2 matrix with elements [x, y] which are the horizontal and vertical coordinates relative to the centre
 %       element, of the smallest element in the matrix.
     
-%         ValueManHat = NaN;
-%         M(3 , 3) = ValueManHat;
-%         M(3 , 1) = ValueManHat;
-%         M(1 , 1) = ValueManHat;
-%         M(1 , 3) = ValueManHat;
+        ValueManHat = NaN;
+        M(3 , 3) = ValueManHat;
+        M(3 , 1) = ValueManHat;
+        M(1 , 1) = ValueManHat;
+        M(1 , 3) = ValueManHat;
         
         Number_Minimum = min(M , [] , 'all');
         PassMinMin = Number_Minimum;
