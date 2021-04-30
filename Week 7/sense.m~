@@ -7,8 +7,55 @@ function Z = sense(I)
     % input: I is an RGB image of the robot's view
     % output: Z = nx3 where Z(i,:) = [id range bearing] (bearing should be in degrees)
     
+    RGB = I;
     
-             
+    % For Blue mask
+    [BWB,maskedRGBImage] = ForBlueColor(RGB);
+    
+    
+    s_Blue = regionprops(BWB,'centroid');
+    Areas_Blue = regionprops(BWB,'Area');
+    
+    Areas_Blue.Area
+    centroids_Blue = cat(1,s_Blue.Centroid)
+    
+    figure(1)
+    imshow(BWB)
+    hold on
+    plot(centroids_Blue(:,1),centroids_Blue(:,2),'b*')
+    hold off
+    
+    % For Red mask
+    [BWR,maskedRGBImage] = ForRedColor(RGB);
+    
+    
+    s_Red = regionprops(BWR,'centroid');
+    Areas_Red = regionprops(BWR,'Area');
+    
+    Areas_Red.Area
+    centroids_Red = cat(1,s_Red.Centroid)
+    
+    figure(2)
+    imshow(BWR)
+    hold on
+    plot(centroids_Red(:,1),centroids_Red(:,2),'b*')
+    hold off
+    
+    % For yellow mask
+    [BWY,maskedRGBImage] = ForYellowColor(RGB);
+    
+    
+    s_Yellow = regionprops(BWY,'centroid');
+    Areas_Yellow = regionprops(BWY,'Area');
+    
+    Areas_Yellow.Area
+    centroids = cat(1,s_Yellow.Centroid)
+    
+    figure(3)
+    imshow(BWY)
+    hold on
+    plot(centroids(:,1),centroids(:,2),'b*')
+    hold off
  
 
 end
