@@ -11,19 +11,19 @@ function [BW,maskedRGBImage] = ForYellowColor(RGB)
 
 
 % Convert RGB image to chosen color space
-I = RGB;
+I = rgb2hsv(RGB);
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 101.000;
-channel1Max = 177.000;
+channel1Min = 0.066;
+channel1Max = 0.211;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 103.000;
-channel2Max = 255.000;
+channel2Min = 0.784;
+channel2Max = 1.000;
 
 % Define thresholds for channel 3 based on histogram settings
 channel3Min = 0.000;
-channel3Max = 93.000;
+channel3Max = 0.621;
 
 % Create mask based on chosen histogram thresholds
 sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
