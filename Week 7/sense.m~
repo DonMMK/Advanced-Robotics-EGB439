@@ -7,7 +7,8 @@ function Z = sense(I)
     % input: I is an RGB image of the robot's view
     % output: Z = nx3 where Z(i,:) = [id range bearing] (bearing should be in degrees)
     
-
+    
+             
  
 
 end
