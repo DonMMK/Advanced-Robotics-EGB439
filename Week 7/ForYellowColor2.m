@@ -1,4 +1,4 @@
-function [BWR,maskedRGBImage] = ForRedColor(RGB)
+function [BWY,maskedRGBImage] = ForYellowColor2(RGB)
 %createMask  Threshold RGB image using auto-generated code from colorThresholder app.
 %  [BW,MASKEDRGBIMAGE] = createMask(RGB) thresholds image RGB using
 %  auto-generated code from the colorThresholder app. The colorspace and
@@ -14,30 +14,30 @@ function [BWR,maskedRGBImage] = ForRedColor(RGB)
 I = rgb2hsv(RGB);
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 0.973;
-channel1Max = 0.030;
+channel1Min = 0.085;
+channel1Max = 0.258;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 0.645;
+channel2Min = 0.384;
 channel2Max = 1.000;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 0.219;
-channel3Max = 0.851;
+channel3Min = 0.293;
+channel3Max = 0.797;
 
 % Create mask based on chosen histogram thresholds
-sliderBW = ( (I(:,:,1) >= channel1Min) | (I(:,:,1) <= channel1Max) ) & ...
+sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
     (I(:,:,2) >= channel2Min ) & (I(:,:,2) <= channel2Max) & ...
     (I(:,:,3) >= channel3Min ) & (I(:,:,3) <= channel3Max);
-BWR = sliderBW;
+BWY = sliderBW;
 
 % Initialize output masked image based on input image.
 maskedRGBImage = RGB;
 
 % Set background pixels where BW is false to zero.
-maskedRGBImage(repmat(~BWR,[1 1 3])) = 0;
+maskedRGBImage(repmat(~BWY,[1 1 3])) = 0;
 
-ErodedImg = imopen(BWR , ones(4));
-BWR = ErodedImg;
+ErodedImg = imopen(BWY , ones(4));
+BWY = ErodedImg;
 
 end

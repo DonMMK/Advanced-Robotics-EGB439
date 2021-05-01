@@ -2,7 +2,7 @@ load map1r1.mat
 
 time_step = 1;
 
-step = data(time_step);
+
 
 %struct with fields:
 %       image: [240×320×3 uint8]
@@ -11,7 +11,13 @@ step = data(time_step);
 %        pose: [1×1 struct]
 
 % the image captured at that step
-imshow(step.image)
+for i = 1: length(data)
+    step = data(i).image;
+    imshow(step);
+    Z(i,:) = sense(step);
+   % pause()
+end
+    
 
 % step.encoders is [left_ticks right_ticks]
 % number of ticks per rotation is 370.
