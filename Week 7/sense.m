@@ -9,6 +9,11 @@ function Z = sense(I)
 % for week 7 task, detect IDs only
 % input: I is an RGB image of the robot's view
 % output: Z = 1xn where n is the number of beacons in the image.
+
+% input: I is an RGB image of the robot's view
+% output: Z = 1xn where n is the number of beacons in the image.
+
+% for week 7 task, detect IDs only
 % input: I is an RGB image of the robot's view
 % output: Z = 1xn where n is the number of beacons in the image.
 
