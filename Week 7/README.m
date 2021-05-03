@@ -14,8 +14,8 @@ time_step = 1;
 for i = 1: length(data)
     step = data(i).image;
     imshow(step);
-    Z(i,:) = sense(step);
-   % pause()
+    Z = sense3rd(step)
+    pause()
 end
     
 

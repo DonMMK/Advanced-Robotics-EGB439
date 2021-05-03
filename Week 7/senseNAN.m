@@ -1,50 +1,124 @@
-function Z = sense(I)
+function Z = senseNAN(I)
 % input: I is an RGB image of the robot's view
 % output: Z = 1xn where n is the number of beacons in the image.
-    RGB = I;
-
-    % For Blue mask
-    [BWB,maskedRGBImage] = ForBlueColor(RGB);
-    s_Blue = regionprops(BWB,'centroid');
-    %Areas_Blue = regionprops(BWB,'Area');
-    %AreaOfBlueCentroids = Areas_Blue.Area;
-    centroids_Blue = cat(1,s_Blue.Centroid);
 
 
-    % For Red mask
-    [BWR,maskedRGBImage] = ForRedColor(RGB);
-    s_Red = regionprops(BWR,'centroid');
-    %Areas_Red = regionprops(BWR,'Area');
-    %AreaOfRedCentroids = Areas_Red.Area;
-    centroids_Red = cat(1,s_Red.Centroid);
+% input: I is an RGB image of the robot's view
+% output: Z = 1xn where n is the number of beacons in the image.
+
+% for week 7 task, detect IDs only
+% input: I is an RGB image of the robot's view
+% output: Z = 1xn where n is the number of beacons in the image.
+
+% input: I is an RGB image of the robot's view
+% output: Z = 1xn where n is the number of beacons in the image.
+
+% for week 7 task, detect IDs only
+% input: I is an RGB image of the robot's view
+% output: Z = 1xn where n is the number of beacons in the image.
+
+%for week 8 task, detect IDs and estimate range and bearing
+% input: I is an RGB image of the robot's view
+% output: Z = nx3 where Z(i,:) = [id range bearing] (bearing should be in degrees)
+
+% Getting the image
+%     load map1r1.mat;
+%     I = data(1).image;
+
+%load map1r1.mat
+%I = data(1).image;
+RGB = I;
+
+% For Blue mask
+[BWB,maskedRGBImage] = ForBlueColor2(RGB);
+s_Blue = regionprops(BWB,'centroid');
+%Areas_Blue = regionprops(BWB,'Area');
+%AreaOfBlueCentroids = Areas_Blue.Area;
+centroids_Blue = cat(1,s_Blue.Centroid);
 
 
-    % For yellow mask
-    [BWY,maskedRGBImage] = ForYellowColor2(RGB);
-    s_Yellow = regionprops(BWY,'centroid');
-    %Areas_Yellow = regionprops(BWY,'Area');
-    %AreaOfYellowCentroids = Areas_Yellow.Area;
-    centroids_Yellow = cat(1,s_Yellow.Centroid);
+% For Red mask
+[BWR,maskedRGBImage] = ForRedColor(RGB);
+s_Red = regionprops(BWR,'centroid');
+%Areas_Red = regionprops(BWR,'Area');
+%AreaOfRedCentroids = Areas_Red.Area;
+centroids_Red = cat(1,s_Red.Centroid);
 
 
-    MINDIST = 3;
+% For yellow mask
+[BWY,maskedRGBImage] = ForYellowColor2(RGB);
+s_Yellow = regionprops(BWY,'centroid');
+%Areas_Yellow = regionprops(BWY,'Area');
+%AreaOfYellowCentroids = Areas_Yellow.Area;
+centroids_Yellow = cat(1,s_Yellow.Centroid);
+
+% Plot all three masks together
+%figure;
+%imshow(BWB+BWR+BWY);
+%hold on
+%plot(centroids_Blue(:,1),centroids_Blue(:,2),'b*')
+%hold on
+%plot(centroids_Red(:,1),centroids_Red(:,2),'b*')
+%hold on
+%plot(centroids_Yellow(:,1),centroids_Yellow(:,2),'b*')
+
+%     centres = [centroids_Red(:,1) ,centroids_Yellow(:,1) , centroids_Blue(:,1)];
+%     [Beacon1_sortedX, ids] = sort(centres(1,:), 'descend')
+%     [Beacon2_sortedX, ids] = sort(centres(2,:), 'descend')
+%
+%
+%     centres2 = [centroids_Red(:,2) ,centroids_Yellow(:,2) , centroids_Blue(:,2)];
+%     [Beacon1_sortedY, ids2] = sort(centres2(1,:), 'descend')
+%     [Beacon2_sortedY, ids2] = sort(centres2(2,:), 'descend')
 
 
+% [red, ~] = ForBlueColor(RGB);
+% redpass = red;
+% 
+% stucturingElement = strel('disk', 6);
+% Filter1 = medfilt2(redpass);
+% filter1pass = Filter1;
+% 
+% Filter2 = imopen(filter1pass, stucturingElement);
+% filter2pass = Filter2;
+% 
+% Filter3 = bwlabel(filter2pass);
+% filter3pass = Filter3;
+% 
+% Filter4 = unique(filter3pass);
+% filter4pass = Filter4;
+% 
+% Beconss = numel(filter4pass);
+% NumberofBeacons = Beconss
+% 
+% if NumberofBeacons == 0
+%     Z = [];
+%     return
+% else
+% 
+
+%for count = 1 :NumberofBeacons
     
-    idsAllY = [];
-%     centres_YCoord = [centroids_Red(:,2) ,centroids_Yellow(:,2) , centroids_Blue(:,2)];
-    for counter = 1 : size(centroids_Blue,1)
+    %BeaconAllValuesX = [];
+    %idsAllX = [];
+    for counter = 1 : size(centroids_Yellow,1)
+        centres_XCoord = [centroids_Red(:,1) ,centroids_Yellow(:,1) , centroids_Blue(:,1)];
+        %  [BeaconN_sortedX, idsX] = sort(centres_XCoord(counter,:), 'descend')
+        BeaconN_sortedX = centres_XCoord(counter,:);
         
-        [min_X_dist_red,idx_x_red] = min(abs(centroids_Blue(counter,1) - centroids_Red(:,1)));
-        [min_X_dist_yellow,idx_x_yel] = min(abs(centroids_Blue(counter,1) - centroids_Yellow(:,1)));
-        
-        if( min_X_dist_yellow < MINDIST && min_X_dist_red < MINDIST )
-            
-            [~, idsY] = sort( [   centroids_Red(idx_x_red,2)   centroids_Blue(counter,2)   centroids_Yellow(idx_x_yel,2)  ],'descend');
-            idsAllY = [idsAllY; idsY];
-        end
+        %BeaconAllValuesX = [BeaconAllValuesX , BeaconN_sortedX]
+        %idsAllX = [idsAllX , idsX]
     end
-
+    
+    %BeaconAllValuesY = [];
+    idsAllY = [];
+    for counter = 1 : size(centroids_Yellow,1)
+        centres_YCoord = [centroids_Red(:,2) ,centroids_Yellow(:,2) , centroids_Blue(:,2)];
+        [BeaconN_sortedY, idsY] = sort(centres_YCoord(counter,:), 'descend');
+        %BeaconAllValuesY = [BeaconAllValuesY , BeaconN_sortedY]
+        idsAllY(:,counter) = idsY;
+    end
+    idsAllY = idsAllY';
     
 
     
@@ -54,15 +128,15 @@ function Z = sense(I)
         for counting2 = 1: size(idsAllY,2)
             
             if idsAllY(counting,counting2) == 3
-                str(counting, counting2) = "11"; % yellow
+                str(counting, counting2) = "11";
             end
             
-            if idsAllY(counting,counting2) == 1 %red
+            if idsAllY(counting,counting2) == 1
                 %str = [str ,[0 1] ];
                 str(counting, counting2) = "01";
             end
             
-            if idsAllY(counting,counting2) == 2 % blue
+            if idsAllY(counting,counting2) == 2
                 %str = [str , [1 0] ];
                 str(counting, counting2) = "10";
             end
@@ -70,7 +144,8 @@ function Z = sense(I)
         end
         
     end
-
+%     N = NumberofBeacons;
+    % str = fliplr(str)
     if str == ""
         Z = [];
         return
@@ -83,7 +158,6 @@ function Z = sense(I)
     for i = 1:size(str,1)
         Z(i) = bin2dec((arr(i)));
     end
-    Z;
      
     
     % write all your helper functions below and call them inside the function sense
@@ -95,14 +169,10 @@ function Z = sense(I)
     
     
     % write all your helper functions below and call them inside the function sense
-
-
 end
-% write all your helper functions below and call them inside the function sense
 
 
-
-function [BWB,maskedRGBImage] = ForBlueColor(RGB)
+function [BWB,maskedRGBImage] = ForBlueColor2(RGB)
 %createMask  Threshold RGB image using auto-generated code from colorThresholder app.
 %  [BW,MASKEDRGBIMAGE] = createMask(RGB) thresholds image RGB using
 %  auto-generated code from the colorThresholder app. The colorspace and
@@ -113,20 +183,21 @@ function [BWB,maskedRGBImage] = ForBlueColor(RGB)
 % Auto-generated by colorThresholder app on 30-Apr-2021
 %------------------------------------------------------
 
+
 % Convert RGB image to chosen color space
 I = rgb2hsv(RGB);
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 0.482;
-channel1Max = 0.715;
+channel1Min = 0.548;
+channel1Max = 0.709;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 0.587;
-channel2Max = 1.000;
+channel2Min = 0.507;
+channel2Max = 0.947;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 0.000;
-channel3Max = 1.000;
+channel3Min = 0.096;
+channel3Max = 0.936;
 
 % Create mask based on chosen histogram thresholds
 sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
@@ -192,13 +263,13 @@ end
 
 
 
-function [BWR,maskedRGBImage] = ForRedColor(RGB)
+function [BWR,maskedRGBImage] = ForRedColor2(RGB)
 %createMask  Threshold RGB image using auto-generated code from colorThresholder app.
 %  [BW,MASKEDRGBIMAGE] = createMask(RGB) thresholds image RGB using
 %  auto-generated code from the colorThresholder app. The colorspace and
 %  range for each channel of the colorspace were set within the app. The
 %  segmentation mask is returned in BW, and a composite of the mask and
-%  original RGB images is returned in maskedRGBImage.
+%  original RGB images is returned in maskedRG2BImage.
 
 % Auto-generated by colorThresholder app on 30-Apr-2021
 %------------------------------------------------------
@@ -208,16 +279,16 @@ function [BWR,maskedRGBImage] = ForRedColor(RGB)
 I = rgb2hsv(RGB);
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 0.973;
-channel1Max = 0.030;
+channel1Min = 0.941;
+channel1Max = 0.076;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 0.645;
-channel2Max = 1.000;
+channel2Min = 0.235;
+channel2Max = 0.835;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 0.219;
-channel3Max = 0.851;
+channel3Min = 0.325;
+channel3Max = 0.627;
 
 % Create mask based on chosen histogram thresholds
 sliderBW = ( (I(:,:,1) >= channel1Min) | (I(:,:,1) <= channel1Max) ) & ...
@@ -236,5 +307,4 @@ BWR = ErodedImg;
 
 
 end
-% write all your helper functions below and call them inside the function sense
-
+% write al

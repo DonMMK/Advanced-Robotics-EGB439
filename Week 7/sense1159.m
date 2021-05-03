@@ -1,21 +1,7 @@
-function Z = sense(I)
+function Z = sense1159(I)
 % input: I is an RGB image of the robot's view
 % output: Z = 1xn where n is the number of beacons in the image.
 
-
-% input: I is an RGB image of the robot's view
-% output: Z = 1xn where n is the number of beacons in the image.
-
-% for week 7 task, detect IDs only
-% input: I is an RGB image of the robot's view
-% output: Z = 1xn where n is the number of beacons in the image.
-
-% input: I is an RGB image of the robot's view
-% output: Z = 1xn where n is the number of beacons in the image.
-
-% for week 7 task, detect IDs only
-% input: I is an RGB image of the robot's view
-% output: Z = 1xn where n is the number of beacons in the image.
 
 %for week 8 task, detect IDs and estimate range and bearing
 % input: I is an RGB image of the robot's view
@@ -53,14 +39,14 @@ s_Yellow = regionprops(BWY,'centroid');
 centroids_Yellow = cat(1,s_Yellow.Centroid);
 
 % Plot all three masks together
-%figure;
-%imshow(BWB+BWR+BWY);
-%hold on
-%plot(centroids_Blue(:,1),centroids_Blue(:,2),'b*')
-%hold on
-%plot(centroids_Red(:,1),centroids_Red(:,2),'b*')
-%hold on
-%plot(centroids_Yellow(:,1),centroids_Yellow(:,2),'b*')
+figure;
+imshow(BWB+BWR+BWY);
+hold on
+plot(centroids_Blue(:,1),centroids_Blue(:,2),'b*')
+hold on
+plot(centroids_Red(:,1),centroids_Red(:,2),'b*')
+hold on
+plot(centroids_Yellow(:,1),centroids_Yellow(:,2),'b*')
 
 %     centres = [centroids_Red(:,1) ,centroids_Yellow(:,1) , centroids_Blue(:,1)];
 %     [Beacon1_sortedX, ids] = sort(centres(1,:), 'descend')
@@ -89,7 +75,7 @@ centroids_Yellow = cat(1,s_Yellow.Centroid);
  filter4pass = Filter4;
  
  Beconss = numel(filter4pass);
- NumberofBeacons = Beconss
+ NumberofBeacons = Beconss;
  
  if NumberofBeacons == 0
      Z = [];
@@ -120,25 +106,25 @@ centroids_Yellow = cat(1,s_Yellow.Centroid);
     end
     idsAllY = idsAllY';
     
-
+    
     
     str = strings;
     
     for counting = 1: size(idsAllY,1)
         for counting2 = 1: size(idsAllY,2)
             
+            if idsAllY(counting,counting2) == 2
+                str(counting, counting2) = "11"; % yellow
+            end
+            
             if idsAllY(counting,counting2) == 3
-                str(counting, counting2) = "11";
+                %str = [str ,[0 1] ];
+                str(counting, counting2) = "01"; % red
             end
             
             if idsAllY(counting,counting2) == 1
-                %str = [str ,[0 1] ];
-                str(counting, counting2) = "01";
-            end
-            
-            if idsAllY(counting,counting2) == 2
                 %str = [str , [1 0] ];
-                str(counting, counting2) = "10";
+                str(counting, counting2) = "10"; % blue
             end
             
         end
