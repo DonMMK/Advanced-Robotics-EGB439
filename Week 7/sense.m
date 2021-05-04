@@ -85,26 +85,7 @@ function Z = sense(I)
     end
     
     
-    % Using the distance to object equation in teams
-    
-    Angle_of_view = 62.2; % Horizontal
-    focal_length = 3.04; % mm
-    camera_sensor_height = 2.74; %mm
-    real_height = 150; %mm
-    
-    %originalImage = imread(fullFileName);
-    [rows, columns, numberOfColorChannels] = size(RGB)
-    image_height =  rows;
-    object_height = regionprops(RGB,'BoundingBox');
-    
-    % Distance to object
-    EqnNancy = focal_length * real_height * image_height;
-    EqnDonkey = object_height * camera_sensor_height;
-    Dist_To_Object = EqnNancy / EqnDonkey;
-    
-    % Getting the bearing
-    
-
+   
 end
 
 
