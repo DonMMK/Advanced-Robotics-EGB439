@@ -136,7 +136,7 @@ function Z = sense(I)
     %end
 
     % Z(i , :) = [id range (meters) bearing (degrees)]
-    Z = [Z', Dist_To_Object, Bearing_deg']
+    Z = [Z', Dist_To_Object, Bearing_deg]
 
 end
 
