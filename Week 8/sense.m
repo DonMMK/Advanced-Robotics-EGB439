@@ -70,42 +70,75 @@ function Z = sense(I)
         end
         
     end
+    
+    
+    % Joining the three centroids
+    Joined_Img = (BWB+BWR+BWY);
+    %imshow(Joined_Img);
+    SE = strel('disk' , 5);
+    JoinedImg_Dil = imdilate(Joined_Img, SE);
+    imshow(JoinedImg_Dil)
 
+    
+    % Using the distance to object equation in teams
+    
+    Angle_of_view = 62.2; % Horizontal
+    focal_length = 3.6/1000; % m % change to 3.04
+    camera_sensor_height = 2.64/1000; % m %2.64
+    real_height = 150/1000; % m
+
+    %originalImage = imread(fullFileName);
+    [rows, columns, numberOfColorChannels] = size(RGB);
+    image_height =  rows;
+    %rprops = regionprops(RGB,'BoundingBox');
+    %object_height = [rprops.BoundingBox];
+    
+    % Using blob analysis
+    Hblob = vision.BlobAnalysis;
+    Logical_Image_RGB = logical(JoinedImg_Dil);
+    [area, centroid, bbox] = Hblob(Logical_Image_RGB);
+    object_height = bbox(:,4);
+
+    % Distance to object
+    EqnNancy = focal_length * real_height * image_height;
+    EqnDonkey = double(object_height) * camera_sensor_height;
+    Dist_To_Object = EqnNancy ./ EqnDonkey;
+    
+    % Getting the bearing
+    % theta = atand( pixel_length * number_of_horizontal_pixels_to_object ) / focal_length ; 
+    
+    
+    V_es = Angle_of_view * 0.5; % V_es is half the camera view angle
+    Vx = columns * 0.5; %Half the image width 
+    
+    blobcenter = centroid(:,1);
+    Ix = Vx - blobcenter;
+    Bearing_deg = Ix / Vx * V_es;
+    
+
+    
     if str == ""
         Z = [];
         return
     end
     
-    for i = 1:size(str,1)
-        arr(i) = strjoin(str(i,:),'');
-    end
+%     for i = 1:size(str,1)
+%         arr(i) = strjoin(str(i,:),'');
+%     end
+%     
+%     for i = 1:size(str,1)
+%         Z(i) = bin2dec((arr(i)));
+%     end
     
-    for i = 1:size(str,1)
-        Z(i) = bin2dec((arr(i)));
-    end
-    
-    % Using the distance to object equation in teams
-    
-    Angle_of_view = 62.2; % Horizontal
-    focal_length = 3.04; % mm
-    camera_sensor_height = 2.74; %mm
-    real_height = 150; %mm
+    %load map1r1.mat;
+    %if Z(i) == data(1).beacon(:,1)
+    %    plot(Dist_To_Object , data(1).beacon(3:4,2) )
+    %end
 
-    %originalImage = imread(fullFileName);
-    [rows, columns, numberOfColorChannels] = size(RGB)
-    image_height =  rows;
-    object_height = regionprops(RGB,'BoundingBox');
-
-    % Distance to object
-    EqnNancy = focal_length * real_height * image_height;
-    EqnDonkey = object_height * camera_sensor_height;
-    Dist_To_Object = EqnNancy / EqnDonkey;
-    
-    % Getting the bearing
-   
-    
     % Z(i , :) = [id range (meters) bearing (degrees)]
+    Z = [Dist_To_Object, Bearing_deg']
     % Z = [] if no beacons are found
+
 end
 
 
