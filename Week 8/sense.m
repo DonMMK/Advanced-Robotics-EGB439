@@ -77,7 +77,7 @@ function Z = sense(I)
     %imshow(Joined_Img);
     SE = strel('disk' , 5);
     JoinedImg_Dil = imdilate(Joined_Img, SE);
-    imshow(JoinedImg_Dil)
+    imshow(JoinedImg_Dil);
 
     
     % Using the distance to object equation in teams
@@ -122,13 +122,13 @@ function Z = sense(I)
         return
     end
     
-%     for i = 1:size(str,1)
-%         arr(i) = strjoin(str(i,:),'');
-%     end
-%     
-%     for i = 1:size(str,1)
-%         Z(i) = bin2dec((arr(i)));
-%     end
+     for i = 1:size(str,1)
+         arr(i) = strjoin(str(i,:),'');
+     end
+     
+     for i = 1:size(str,1)
+         Z(i) = bin2dec((arr(i)));
+     end
     
     %load map1r1.mat;
     %if Z(i) == data(1).beacon(:,1)
@@ -136,8 +136,7 @@ function Z = sense(I)
     %end
 
     % Z(i , :) = [id range (meters) bearing (degrees)]
-    Z = [Dist_To_Object, Bearing_deg']
-    % Z = [] if no beacons are found
+    Z = [Z', Dist_To_Object, Bearing_deg']
 
 end
 

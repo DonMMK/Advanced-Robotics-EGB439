@@ -74,7 +74,7 @@ function Z = sense(I)
     
     % Joining the three centroids
     Joined_Img = (BWB+BWR+BWY);
-    imshow(Joined_Img)
+    %imshow(Joined_Img);
     SE = strel('disk' , 5);
     JoinedImg_Dil = imdilate(Joined_Img, SE);
     imshow(JoinedImg_Dil)
@@ -88,7 +88,7 @@ function Z = sense(I)
     real_height = 150/1000; % m
 
     %originalImage = imread(fullFileName);
-    [rows, columns, numberOfColorChannels] = size(RGB)
+    [rows, columns, numberOfColorChannels] = size(RGB);
     image_height =  rows;
     %rprops = regionprops(RGB,'BoundingBox');
     %object_height = [rprops.BoundingBox];
@@ -108,12 +108,12 @@ function Z = sense(I)
     % theta = atand( pixel_length * number_of_horizontal_pixels_to_object ) / focal_length ; 
     
     
-    V_es = 31.1; % V_es is half the camera view angle
+    V_es = Angle_of_view * 0.5; % V_es is half the camera view angle
     Vx = columns * 0.5; %Half the image width 
     
-    
+    blobcenter = centroid(:,1);
     Ix = Vx - blobcenter;
-    Bearing_deg = Ix / Vx * V_es
+    Bearing_deg = Ix / Vx * V_es;
     
 
     
@@ -136,6 +136,7 @@ function Z = sense(I)
     %end
 
     % Z(i , :) = [id range (meters) bearing (degrees)]
+    Z = [Dist_To_Object, Bearing_deg']
     % Z = [] if no beacons are found
 
 end
