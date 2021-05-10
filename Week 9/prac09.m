@@ -30,7 +30,11 @@ function [d , dth] = get_odom(new_ticks,old_ticks)
     Wheel_axis = 0.15;
     
     delta_tick = new_ticks - old_ticks;
-    D_left = 2 * pi * 0.5 * Wheel_diameter * delta_tick / Num_tick_per_rot
+    D_left = 2 * pi * 0.5 * Wheel_diameter * delta_tick(:,1) / Num_tick_per_rot;
+    D_right= 2 * pi * 0.5 * Wheel_diameter * delta_tick(:,2) / Num_tick_per_rot;
+    
+    d = ( D_left + D_right ) / 2;
+    dt = D_left - D_right / Wheel_axis ;
 
 
 
@@ -42,7 +46,8 @@ function next_pose = move(current_pose, d , dth)
 %        dt angle rotated in radians 
 %outputs: next_pose is a 3x1 vector [x; y; theta] of the robot (theta in radians)
 
-
+    X_dash = D_central 
+    Y_dash = 
 
 
 end
