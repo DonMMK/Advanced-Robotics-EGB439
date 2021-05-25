@@ -24,17 +24,20 @@ function [d , dth] = get_odom(new_ticks,old_ticks)
 %inputs: new_ticks , old_ticks both are 1x2 vectors [left_ticks right_ticks]
 %outputs: d  distance traveled in meters
 %        dt angle rotated in radians 
-    % Given values
+
     Num_tick_per_rot = 370;
     Wheel_diameter = 0.065;
     Wheel_axis = 0.15;
     
-    delta_tick = new_ticks - old_ticks;
-    D_left = 2 * pi * 0.5 * Wheel_diameter * delta_tick(:,1) / Num_tick_per_rot;
-    D_right= 2 * pi * 0.5 * Wheel_diameter * delta_tick(:,2) / Num_tick_per_rot;
+    delta_tick_left = new_ticks(:,1) - old_ticks(:,1);
+    delta_tick_right = new_ticks(:,2) - old_ticks(:,2);
+    
+    D_left = (2 * pi * 0.5 * Wheel_diameter * delta_tick_left) / Num_tick_per_rot;
+    D_right= (2 * pi * 0.5 * Wheel_diameter * delta_tick_right) / Num_tick_per_rot;
     
     d = ( D_left + D_right ) / 2;
-    dt = D_left - D_right / Wheel_axis ;
+    dth =  (D_right- D_left)/ Wheel_axis;
+
 
 
 
