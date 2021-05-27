@@ -9,7 +9,6 @@ num_steps = get_numsteps();
 % at t=1 the robot starts at x=0.4060, y=0.1800, theta=0.1244 rad; 
 % mu is 3x1
 mu = [0.4060;0.1800;0.1244];
-%mu = [data(1).pose.x; data(1).pose.y ; data(1).pose.theta];
 
 % you can choose sigma at t=1
 Sigma = diag([0.1 0.1 5*pi/180]).^2; 
@@ -21,9 +20,10 @@ trj_est = zeros(num_steps,3);
 trj_est(1,:) = mu;
 
 % initliase the R matrix
-R = [0 , 0 ; 0 , 0.0140];
+R =[0 , 0 ; 0 , 0.014] ;
 % initliase the Q matrix
-Q = [0.0420 , 0 ; 0 , 49.0];
+Q =[0.041 , 0 ; 0 , 49] ; 
+
 
 % For mean / mu
 xt = mu;
@@ -67,7 +67,7 @@ for t = 2:num_steps
     [xt,S] = update_step(M(:,2:3),z,xt,S,Q);
     
     transpose_t = xt';
-    trj_est(t,:) = transpose_t
+    trj_est(t,:) = transpose_t;
     
 end
 
@@ -206,16 +206,22 @@ function Z = sense(I)
     
     % Sense function from previous pracs updated
     [BWB , ~] = ForBlueColor2(RGB);
+    CondB = medfilt2(BWB, [5 5]);
+    BWB = CondB;
     s_Blue = regionprops(BWB,'Centroid','Area','BoundingBox');
     
     
     % Sense function from previous pracs updated
     [BWR , ~] = ForRedColor2(RGB);
+    CondR = medfilt2(BWR, [5 5]);
+    BWR = CondR;
     s_Red = regionprops(BWR,'Centroid','Area','BoundingBox');
     
     
     % Sense function from previous pracs updated
     [BWY , ~] = ForYellowColor2(RGB);
+    CondY = medfilt2(BWY, [5 5]);
+    BWY = CondY;
     s_Yellow = regionprops(BWY,'Centroid','Area','BoundingBox');
     
     % blue
@@ -308,7 +314,7 @@ function Z = sense(I)
     
             Angle_of_view = 62.2; % Horizontal
             focal_length = 3.6; % m % change to 3.04
-            camera_sensor_height = 2.74; % mm %2.64
+            camera_sensor_height = 2.7; % mm %2.64
             real_height = 150; % mm
             
             Range = ((focal_length * real_height * 240)/ (Sorted_Height_In*camera_sensor_height) ) * 0.001;
@@ -344,16 +350,16 @@ function [BWY,maskedRGBImage] = ForYellowColor2(RGB)
 % Convert RGB image to chosen color space
 I = RGB;
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 100.000;
-channel1Max = 199.000;
+channel1Min = 99.000;
+channel1Max = 197.000;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 101.000;
-channel2Max = 187.000;
+channel2Min = 102.000;
+channel2Max = 185.000;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 1.000;
-channel3Max = 88.000;
+channel3Min = 0.000;
+channel3Max = 86.000;
 
 
 % Create mask based on chosen histogram thresholds
@@ -368,7 +374,8 @@ maskedRGBImage = RGB;
 % Set background pixels where BW is false to zero.
 maskedRGBImage(repmat(~BWY,[1 1 3])) = 0;
 %attempt to remove small. same as using eroded in previous attempts
-BWY = medfilt2(BWY, [5 5]);
+%ErodedImg = imopen(BWY , ones(4));
+%BWY = ErodedImg;
 end
 
 
@@ -387,11 +394,11 @@ function [BWB,maskedRGBImage] = ForBlueColor2(RGB)
 I = RGB;
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 13.000;
+channel1Min = 14.000;
 channel1Max = 43.000;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 15.000;
+channel2Min = 16.000;
 channel2Max = 80.000;
 
 % Define thresholds for channel 3 based on histogram settings
@@ -410,7 +417,8 @@ maskedRGBImage = RGB;
 % Set background pixels where BW is false to zero.
 maskedRGBImage(repmat(~BWB,[1 1 3])) = 0;
 %attempt to remove small. same as using eroded in previous attempts
-BWB = medfilt2(BWB, [5 5]);
+%ErodedImg = imopen(BWB , ones(4));
+%BWB = ErodedImg;
 end
 
 
@@ -430,15 +438,15 @@ function [BWR,maskedRGBImage] = ForRedColor2(RGB)
 I = RGB;
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 71.000;
+channel1Min = 72.000;
 channel1Max = 180.000;
 
 % Define thresholds for channel 2 based on histogram settings
-channel2Min = 1.000;
+channel2Min = 0.000;
 channel2Max = 53.000;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 1.000;
+channel3Min = 0.000;
 channel3Max = 72.000;
 
 % Create mask based on chosen histogram thresholds
@@ -453,6 +461,11 @@ maskedRGBImage = RGB;
 % Set background pixels where BW is false to zero.
 maskedRGBImage(repmat(~BWR,[1 1 3])) = 0;
 %attempt to remove small. same as using eroded in previous attempts
-BWR = medfilt2(BWR, [5 5]);
+%ErodedImg = imopen(BWR , ones(4));
+%BWR = ErodedImg;
 end
+
+
+
+
 
