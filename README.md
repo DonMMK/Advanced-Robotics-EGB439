@@ -5,7 +5,7 @@
 This repository contains the code for Unit_Code which is a part of the core/optional curriculum of the Computer and Software Systems Major/Robotics Minor. 
 
 ### Topics Covered 
-Week 1 Lab: Introduction to navigation
+Week 1 Lab: Introduction to navigation  
 Week 2 Lab: Drive in Circle
 Week 3 Lab: Drive to a point
 Week 4 Lab: Control to follow a line
