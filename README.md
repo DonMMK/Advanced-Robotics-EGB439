@@ -1,8 +1,5 @@
-# EGB439 Code
- All code for Module, Practicals and Self Designed Project. Semester 1 2021
-
-# Unit Name
-This repository contains the code for Unit_Code which is a part of the core/optional curriculum of the Computer and Software Systems Major/Robotics Minor. 
+# Advanced Robotics
+This repository contains the code for Unit_Code which is a part of the core curriculum of the Robotics Minor. 
 
 ### Topics Covered 
 Week 1 Lab: Introduction to navigation  
