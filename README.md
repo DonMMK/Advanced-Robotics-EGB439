@@ -3,7 +3,7 @@ This repository contains the code for Unit_Code which is a part of the core curr
 
 ### Topics Covered 
 Week 1 Lab: Introduction to navigation  
-Week 2 Lab: Drive in Circle
+Week 2 Lab: Drive in Circle  
 Week 3 Lab: Drive to a point   
 Week 4 Lab: Control to follow a line  
 Week 5 Lab: Follow a trajectory: Leminiscate of bernoulli  
